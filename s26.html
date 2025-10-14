@@ -46,8 +46,12 @@
                 <img src="images/s26_01.webp" alt="背景圖片" class="blur-bg">
             </div>
             <div class="main-images">
-                <img src="images/s26_01.webp" alt="圖片1" class="main-image">
-                <img src="images/s26_02.webp" alt="圖片2" class="main-image">
+                <!-- PC版圖片 -->
+                <img src="images/s26_01.webp" alt="圖片1" class="main-image pc-image">
+                <img src="images/s26_02.webp" alt="圖片2" class="main-image pc-image">
+                <!-- 手機版圖片 -->
+                <img src="images/s26_01_mobile.webp" alt="圖片1手機版" class="main-image mobile-image">
+                <img src="images/s26_02_mobile.webp" alt="圖片2手機版" class="main-image mobile-image">
             </div>
         </div>
     </div>
@@ -87,6 +91,22 @@
         /* 隱藏模糊背景層 */
         .background-blur {
             display: none;
+        }
+
+        /* 手機版圖片默認隱藏 */
+        .mobile-image {
+            display: none;
+        }
+
+        /* 響應式設計：手機版顯示手機圖片，隱藏PC圖片 */
+        @media screen and (max-width: 768px) {
+            .pc-image {
+                display: none;
+            }
+            
+            .mobile-image {
+                display: block;
+            }
         }
     </style>
 </body>
