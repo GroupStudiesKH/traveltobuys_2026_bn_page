@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台灣虎航 tigerbites</title>
+    <meta name="description" content="Tap here to open the link.">
+    <meta name="keywords" content="台灣虎航,tigerbites,機上美食,預訂餐點,空中餐點,航空餐,虎航美食">
+    <meta property="og:title" content="台灣虎航 tigerbites">
+    <meta property="og:description" content="Tap here to open the link.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* 背景模糊層 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+        
+        /* PC版背景 */
+        @media screen and (min-width: 769px) {
+            body::before {
+                background-image: url('images/enter.webp');
+                filter: blur(20px);
+                transform: scale(1.2);
+            }
+        }
+        
+        /* 手機版背景 */
+        @media screen and (max-width: 768px) {
+            body::before {
+                background-image: url('images/enter_mobile.webp');
+                filter: blur(20px);
+                transform: scale(1.2);
+            }
+        }
+        
+        /* 背景覆蓋層 - 增加深度效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(1px);
+        }
+        
+        .container {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            background: transparent;
+        }
+        
+        .pc-version {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .mobile-version {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .full-width {
+            width: 100%;
+            aspect-ratio: 4000 / 1859;
+            object-fit: cover;
+            filter: blur(0px);
+            display: block;
+        }
+        
+        .full-screen {
+            width: 100%;
+            aspect-ratio: 1563 / 2499;
+            object-fit: cover;
+            display: block;
+        }
+        
+        /* 確保 image map 可以點擊 */
+        map {
+            display: block;
+        }
+        
+        area {
+            cursor: pointer;
+            display: block;
+        }
+        
+        /* 確保圖片容器可以正確接收點擊 */
+        .pc-version, .mobile-version {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        /* 替代點擊區域 */
+        .click-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .click-overlay a {
+            position: absolute;
+            display: block;
+            pointer-events: auto;
+            text-decoration: none;
+            background-color: transparent;
+        }
+        
+        /* PC版點擊區域 */
+        .click-left {
+            left: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: transparent;
+        }
+        
+        .click-right {
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background-color: transparent;
+        }
+        
+        /* 手機版點擊區域 */
+        .click-top {
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 50%;
+            background-color: transparent;
+        }
+        
+        .click-bottom {
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: transparent;
+        }
+        
+        /* Mobile responsive */
+        @media screen and (max-width: 768px) {
+            .pc-version {
+                display: none;
+            }
+            
+            .mobile-version {
+                display: block;
+            }
+        }
+        
+        /* 調試模式：添加視覺提示（可選） */
+        .click-left:hover, .click-right:hover, .click-top:hover, .click-bottom:hover {
+            background-color: rgba(255,255,255,0.2) !important;
+            transition: background-color 0.3s;
+        }
+        
+        /* 確保圖片容器正確縮放 */
+        .pc-version img, .mobile-version img {
+            width: 100%;
+            height: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        /* 隱藏調試背景色（生產環境可以取消這段註解） */
+        /*
+        .click-left, .click-right, .click-top, .click-bottom {
+            background-color: transparent !important;
+        }
+        */
+    </style>
+
+    <!-- Google Tag Manager -->
+
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+
+        })(window, document, 'script', 'dataLayer', 'GTM-N4DW3Q');</script>
+
+    <!-- End Google Tag Manager -->
+</head>
+
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N4DW3Q" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        <!-- PC Version Image Map -->
+        <div class="pc-version">
+            <img src="images/enter.webp" alt="PC Version" usemap="#pc-map" class="full-width" id="pc-image">
+            <map name="pc-map" id="pc-map-area">
+                <area shape="rect" coords="0,0,960,1080" href="s26.html" alt="S26" id="pc-left">
+                <area shape="rect" coords="960,0,1920,1080" href="w26.html" alt="W26" id="pc-right">
+            </map>
+            <!-- 替代點擊區域 -->
+            <div class="click-overlay">
+                <a href="s26.html" class="click-left" title="S26"></a>
+                <a href="w26.html" class="click-right" title="W26"></a>
+            </div>
+        </div>
+        
+        <!-- Mobile Version Image Map -->
+        <div class="mobile-version">
+            <img src="images/enter_mobile.webp" alt="Mobile Version" usemap="#mobile-map" class="full-screen" id="mobile-image">
+            <map name="mobile-map" id="mobile-map-area">
+                <area shape="rect" coords="0,0,768,540" href="s26.html" alt="S26" id="mobile-top">
+                <area shape="rect" coords="0,540,768,1080" href="w26.html" alt="W26" id="mobile-bottom">
+            </map>
+            <!-- 替代點擊區域 -->
+            <div class="click-overlay">
+                <a href="s26.html" class="click-top" title="S26"></a>
+                <a href="w26.html" class="click-bottom" title="W26"></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 動態更新 Image Map 坐標和替代點擊區域
+        function updateImageMaps() {
+            console.log('Updating image maps...');
+            
+            const pcImage = document.getElementById('pc-image');
+            const mobileImage = document.getElementById('mobile-image');
+            
+            if (pcImage && window.innerWidth > 768) {
+                // 使用 aspect-ratio 4000 / 1859 計算實際高度
+                const pcWidth = pcImage.clientWidth;
+                const pcHeight = Math.floor(pcWidth * 1859 / 4000);
+                const halfWidth = Math.floor(pcWidth / 2);
+                
+                console.log(`PC Image: ${pcWidth}x${pcHeight}, Half width: ${halfWidth}`);
+                
+                const pcLeft = document.getElementById('pc-left');
+                const pcRight = document.getElementById('pc-right');
+                
+                if (pcLeft && pcRight) {
+                    pcLeft.coords = `0,0,${halfWidth},${pcHeight}`;
+                    pcRight.coords = `${halfWidth},0,${pcWidth},${pcHeight}`;
+                    console.log('PC map coordinates updated');
+                }
+                
+                // 更新替代點擊區域
+                const clickLeft = document.querySelector('.pc-version .click-left');
+                const clickRight = document.querySelector('.pc-version .click-right');
+                if (clickLeft && clickRight) {
+                    clickLeft.style.width = halfWidth + 'px';
+                    clickLeft.style.height = pcHeight + 'px';
+                    clickRight.style.width = (pcWidth - halfWidth) + 'px';
+                    clickRight.style.height = pcHeight + 'px';
+                    clickRight.style.left = halfWidth + 'px';
+                }
+            }
+            
+            if (mobileImage && window.innerWidth <= 768) {
+                // 使用 aspect-ratio 1563 / 2499 計算實際高度
+                const mobileWidth = mobileImage.clientWidth;
+                const mobileHeight = Math.floor(mobileWidth * 2499 / 1563);
+                const halfHeight = Math.floor(mobileHeight / 2);
+                
+                console.log(`Mobile Image: ${mobileWidth}x${mobileHeight}, Half height: ${halfHeight}`);
+                
+                const mobileTop = document.getElementById('mobile-top');
+                const mobileBottom = document.getElementById('mobile-bottom');
+                
+                if (mobileTop && mobileBottom) {
+                    mobileTop.coords = `0,0,${mobileWidth},${halfHeight}`;
+                    mobileBottom.coords = `0,${halfHeight},${mobileWidth},${mobileHeight}`;
+                    console.log('Mobile map coordinates updated');
+                }
+                
+                // 更新替代點擊區域
+                const clickTop = document.querySelector('.mobile-version .click-top');
+                const clickBottom = document.querySelector('.mobile-version .click-bottom');
+                if (clickTop && clickBottom) {
+                    clickTop.style.width = mobileWidth + 'px';
+                    clickTop.style.height = halfHeight + 'px';
+                    clickBottom.style.width = mobileWidth + 'px';
+                    clickBottom.style.height = (mobileHeight - halfHeight) + 'px';
+                    clickBottom.style.top = halfHeight + 'px';
+                    clickBottom.style.bottom = 'auto';
+                }
+            }
+        }
+        
+        // 添加點擊測試
+        function addClickTest() {
+            // Image map 區域
+            const areas = document.querySelectorAll('area');
+            areas.forEach(area => {
+                area.addEventListener('click', function(e) {
+                    console.log('Image map area clicked:', this.alt, this.href);
+                });
+            });
+            
+            // 替代點擊區域
+            const overlayLinks = document.querySelectorAll('.click-overlay a');
+            overlayLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    console.log('Overlay link clicked:', this.title, this.href);
+                });
+            });
+        }
+        
+        // 視窗大小改變時更新坐標
+        window.addEventListener('resize', updateImageMaps);
+        
+        // 定期更新坐標（確保正確性）
+        setInterval(updateImageMaps, 1000);
+        
+        // 初始化函數
+        function initializeClickAreas() {
+            console.log('Initializing click areas...');
+            
+            // 確保圖片和元素都存在
+            const pcImg = document.getElementById('pc-image');
+            const mobileImg = document.getElementById('mobile-image');
+            
+            if (!pcImg || !mobileImg) {
+                console.warn('Images not found, retrying in 1 second...');
+                setTimeout(initializeClickAreas, 1000);
+                return;
+            }
+            
+            // 等待圖片完全載入
+            let imagesLoaded = 0;
+            const totalImages = 2;
+            
+            function imageLoaded() {
+                imagesLoaded++;
+                console.log(`Image loaded: ${imagesLoaded}/${totalImages}`);
+                
+                if (imagesLoaded >= totalImages) {
+                     console.log('All images loaded, updating maps...');
+                     updateImageMaps();
+                     addClickTest();
+                 }
+            }
+            
+            pcImg.addEventListener('load', imageLoaded);
+            mobileImg.addEventListener('load', imageLoaded);
+            
+            // 如果圖片已經載入完成（從快取）
+            if (pcImg.complete) imageLoaded();
+            if (mobileImg.complete) imageLoaded();
+        }
+        
+        // 立即初始化
+        initializeClickAreas();
+    </script>
+
+</body>
+
+</html>
