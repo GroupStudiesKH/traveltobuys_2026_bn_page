@@ -56,6 +56,10 @@
         </div>
     </div>
 
+    <a class="add"
+        href="https://manage.tigerairtw.com/zh-TW/search-order?_gl=1*1e2lpps*_gcl_aw*R0NMLjE3NDIyODkyNjcuQ2owS0NRandzLVMtQmhEMkFSSXNBTHNzRzBaYXVkUDR1aVBQbDZLNG1TQm1hWklrYjhsbGwwejRRV2U2SElHeUdXU1VETWZCaU1GU0Jvc2FBbWRTRUFMd193Y0I.*_gcl_au*MTQyMjQxMDc5Mi4xNzQwNjM1Nzk4*_ga*MjA3NzQ2MjA4NS4xNzMyODQ2NDQ2*_ga_SNXJDVLRNM*MTc0Mjc4MDI2Ni40NC4wLjE3NDI3ODAyNjYuNjAuMC4w"
+        target="_blank"><img src="images/add.webp" /></a>
+
     <style>
         body {
             margin: 0;
@@ -98,12 +102,53 @@
             display: none;
         }
 
+        .add {
+            animation: shakeY .8s ease-out infinite;
+            position: fixed;
+            bottom: 10%;
+            right: calc((100% - 1440px)/2);
+            z-index: 99
+        }
+
+        .add img {
+            width: 112px
+        }
+
+        @media (max-width: 768px) {
+            .add img {
+                width: 80px
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .add {
+                right: 10px
+            }
+        }
+
+        @keyframes shakeY {
+
+            0%,
+            to {
+                transform: translateY(0)
+            }
+
+            25% {
+                transform: translateY(-10px)
+            }
+
+            75% {
+                transform: translateY(10px)
+            }
+        }
+
+
         /* 響應式設計：手機版顯示手機圖片，隱藏PC圖片 */
         @media screen and (max-width: 768px) {
             .pc-image {
                 display: none;
             }
-            
+
             .mobile-image {
                 display: block;
             }
