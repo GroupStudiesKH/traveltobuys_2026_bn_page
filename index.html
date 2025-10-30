@@ -136,9 +136,18 @@
             background-color: transparent;
         }
 
-        .click-bottom {
+        .click-bottom-left {
             left: 0;
-            width: 100%;
+            bottom: 0;
+            width: 50%;
+            height: 50%;
+            background-color: transparent;
+        }
+
+        .click-bottom-right {
+            right: 0;
+            bottom: 0;
+            width: 50%;
             height: 50%;
             background-color: transparent;
         }
@@ -227,13 +236,15 @@
             <img src="images/enter_mobile.webp" alt="Mobile Version" usemap="#mobile-map" class="full-screen"
                 id="mobile-image">
             <map name="mobile-map" id="mobile-map-area">
-                <area shape="rect" coords="0,0,768,540" href="w26.html" alt="W26" id="mobile-top">
-                <area shape="rect" coords="0,540,768,1080" href="s26.html" alt="S26" id="mobile-bottom">
+                <area shape="rect" coords="0,0,768,1249" href="w26.html" alt="W26" id="mobile-top">
+                <area shape="rect" coords="0,1249,384,2499" href="w26.html" alt="W26" id="mobile-bottom-left">
+                <area shape="rect" coords="384,1249,768,2499" href="s26.html" alt="S26" id="mobile-bottom-right">
             </map>
             <!-- 替代點擊區域 -->
             <div class="click-overlay">
                 <a href="w26.html" class="click-top" title="W26"></a>
-                <a href="s26.html" class="click-bottom" title="S26"></a>
+                <a href="w26.html" class="click-bottom-left" title="W26"></a>
+                <a href="s26.html" class="click-bottom-right" title="S26"></a>
             </div>
         </div>
     </div>
@@ -279,29 +290,43 @@
                 // 使用 aspect-ratio 1563 / 2499 計算實際高度
                 const mobileWidth = mobileImage.clientWidth;
                 const mobileHeight = Math.floor(mobileWidth * 2499 / 1563);
+                const halfWidth = Math.floor(mobileWidth / 2);
                 const halfHeight = Math.floor(mobileHeight / 2);
 
-                console.log(`Mobile Image: ${mobileWidth}x${mobileHeight}, Half height: ${halfHeight}`);
+                console.log(`Mobile Image: ${mobileWidth}x${mobileHeight}, Half width: ${halfWidth}, Half height: ${halfHeight}`);
 
                 const mobileTop = document.getElementById('mobile-top');
-                const mobileBottom = document.getElementById('mobile-bottom');
+                const mobileBottomLeft = document.getElementById('mobile-bottom-left');
+                const mobileBottomRight = document.getElementById('mobile-bottom-right');
 
-                if (mobileTop && mobileBottom) {
+                if (mobileTop && mobileBottomLeft && mobileBottomRight) {
                     mobileTop.coords = `0,0,${mobileWidth},${halfHeight}`;
-                    mobileBottom.coords = `0,${halfHeight},${mobileWidth},${mobileHeight}`;
+                    mobileBottomLeft.coords = `0,${halfHeight},${halfWidth},${mobileHeight}`;
+                    mobileBottomRight.coords = `${halfWidth},${halfHeight},${mobileWidth},${mobileHeight}`;
                     console.log('Mobile map coordinates updated');
                 }
 
                 // 更新替代點擊區域
                 const clickTop = document.querySelector('.mobile-version .click-top');
-                const clickBottom = document.querySelector('.mobile-version .click-bottom');
-                if (clickTop && clickBottom) {
+                const clickBottomLeft = document.querySelector('.mobile-version .click-bottom-left');
+                const clickBottomRight = document.querySelector('.mobile-version .click-bottom-right');
+                if (clickTop && clickBottomLeft && clickBottomRight) {
+                    // 上半部 (W26)
                     clickTop.style.width = mobileWidth + 'px';
                     clickTop.style.height = halfHeight + 'px';
-                    clickBottom.style.width = mobileWidth + 'px';
-                    clickBottom.style.height = (mobileHeight - halfHeight) + 'px';
-                    clickBottom.style.top = halfHeight + 'px';
-                    clickBottom.style.bottom = 'auto';
+                    clickTop.style.top = '0';
+                    
+                    // 下半部左側 (W26)
+                    clickBottomLeft.style.width = halfWidth + 'px';
+                    clickBottomLeft.style.height = (mobileHeight - halfHeight) + 'px';
+                    clickBottomLeft.style.top = halfHeight + 'px';
+                    clickBottomLeft.style.left = '0';
+                    
+                    // 下半部右側 (S26)
+                    clickBottomRight.style.width = (mobileWidth - halfWidth) + 'px';
+                    clickBottomRight.style.height = (mobileHeight - halfHeight) + 'px';
+                    clickBottomRight.style.top = halfHeight + 'px';
+                    clickBottomRight.style.left = halfWidth + 'px';
                 }
             }
         }
