@@ -164,13 +164,13 @@
         }
 
         /* 調試模式：添加視覺提示（可選） */
-        .click-left:hover,
+        /* .click-left:hover,
         .click-right:hover,
         .click-top:hover,
         .click-bottom:hover {
             background-color: rgba(255, 255, 255, 0.2) !important;
             transition: background-color 0.3s;
-        }
+        } */
 
         /* 確保圖片容器正確縮放 */
         .pc-version img,
@@ -315,13 +315,13 @@
                     clickTop.style.width = mobileWidth + 'px';
                     clickTop.style.height = halfHeight + 'px';
                     clickTop.style.top = '0';
-                    
+
                     // 下半部左側 (W26)
                     clickBottomLeft.style.width = halfWidth + 'px';
                     clickBottomLeft.style.height = (mobileHeight - halfHeight) + 'px';
                     clickBottomLeft.style.top = halfHeight + 'px';
                     clickBottomLeft.style.left = '0';
-                    
+
                     // 下半部右側 (S26)
                     clickBottomRight.style.width = (mobileWidth - halfWidth) + 'px';
                     clickBottomRight.style.height = (mobileHeight - halfHeight) + 'px';
